@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>File Uploader</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      #container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background-color: #ccc;
+      }
+
+      input {
+        width: 300px;
+        border: none;
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+        border: 1px solid #000;
+        cursor: pointer;
+      }
+
+      button {
+        width: 300px;
+        height: 50px;
+        border: none;
+        border-radius: 5px;
+        background-color: #000;
+        color: #fff;
+        font-size: 1.2rem;
+        cursor: pointer;
+        margin-bottom: 20px;
+      }
+
+      .link-div {
+        margin-top: 10px;
+        cursor: pointer;
+        color: blue;
+      }
+
+      input[type="file"]::-webkit-file-upload-button {
+        background-color: transparent;
+        border: none;
+        color: #2b3a55;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="container"></div>
+  </body>
+  <script>
+    const container = document.getElementById("container");
+
+    const input = document.createElement("input");
+    input.type = "file";
+    input.name = "file";
+    input.id = "file";
+    input.accept = "image/*";
+    input.multiple = true;
+
+    const button = document.createElement("button");
+    button.innerText = "Upload";
+
+    container.appendChild(input);
+    container.appendChild(button);
+
+    const response = document.createElement("div");
+    const linkDiv = document.createElement("div");
+    linkDiv.setAttribute("class", "link-div");
+
+    button.addEventListener("click", () => {
+      const files = input.files;
+      const formData = new FormData();
+
+      for (let i = 0; i < files.length; i++) {
+        formData.append("file", files[i]);
+      }
+
+      fetch("https://file-uploader-testing.onrender.com/upload", {
+        method: "POST",
+        body: formData,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          response.innerText = data.message;
+          container.appendChild(response);
+
+          const link = document.createElement("a");
+          link.innerText = "Click here to view file";
+
+          linkDiv.appendChild(link);
+          container.appendChild(linkDiv);
+
+          link.addEventListener("click", () => {
+            window.open(
+              `https://file-uploader-testing.onrender.com${data.file_url}`
+            );
+          });
+        });
+    });
+  </script>
+</html>
