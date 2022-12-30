@@ -5,10 +5,12 @@ const dbName = "backend_task";
 const express = require("express");
 const multer = require("multer");
 const assert = require("assert");
+const cors = require("cors");
 
 const { MongoClient, GridFSBucket, ObjectId } = require("mongodb");
 
 const app = express();
+app.use(cors());
 const upload = multer();
 
 app.get("/", (req, res) => {
