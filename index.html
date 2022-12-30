@@ -49,6 +49,9 @@
         margin-top: 10px;
         cursor: pointer;
         color: blue;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
       }
 
       input[type="file"]::-webkit-file-upload-button {
@@ -112,6 +115,8 @@
             );
           });
         });
+
+      input.value = "";
     });
   </script>
 </html>
